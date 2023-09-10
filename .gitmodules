@@ -1,0 +1,15 @@
+[submodule "Drivers/stm32-ssd1306"]
+	path = Drivers/stm32-ssd1306
+	url = https://github.com/afiskon/stm32-ssd1306.git
+[submodule "Drivers/STM32CubeL4"]
+	path = Drivers/STM32CubeL4
+	url = https://github.com/STMicroelectronics/STM32CubeL4.git
+[submodule "Drivers/BME680_driver"]
+	path = Drivers/BME680_driver
+	url = https://github.com/boschsensortec/BME680_driver.git
+[submodule "Drivers/BMI08x-Sensor-API"]
+	path = Drivers/BMI08x-Sensor-API
+	url = https://github.com/boschsensortec/BMI08x-Sensor-API.git
+[submodule "Drivers/BMM150-Sensor-API"]
+	path = Drivers/BMM150-Sensor-API
+	url = https://github.com/boschsensortec/BMM150-Sensor-API.git
