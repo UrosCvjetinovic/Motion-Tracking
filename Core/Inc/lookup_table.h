@@ -9,7 +9,15 @@
 #define INC_LOOKUP_TABLE_H_
 
 #include "stdint.h"
-
-const uint32_t image[1000];
+//50x50px
+extern const uint8_t planeImgStraight[];
+extern const uint8_t planeImgUp[];
+extern const uint8_t planeImgDown[];
+extern const uint8_t planeImgLeft[];
+extern const uint8_t planeImgRight[];
+extern const uint8_t planeImgDownRight[];
+extern const uint8_t planeImgDownLeft[];
+extern const uint8_t planeImgUpLeft[];
+extern const uint8_t planeImgUpRight[];
 
 #endif /* INC_LOOKUP_TABLE_H_ */

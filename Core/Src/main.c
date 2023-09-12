@@ -110,13 +110,60 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  uint8_t counter = 0u;
+  uint8_t sizeImg = 50u;
+
   while (1)
   {
-	  //Update_Graphics();
+	  ssd1306_Fill(Black);
+	  Update_Graphics();
+	  switch(counter) {
+	  	  case 0:
+	  		ssd1306_DrawBitmap(0u,0u, &planeImgStraight, sizeImg, sizeImg, White);
+	  	  Update_Graphics();
+	  		break;
+	  	  case 1:
+	  		ssd1306_DrawBitmap(0u,0u, &planeImgUp, sizeImg, sizeImg, White);
+	  	  Update_Graphics();
+	  		break;
+	  	  case 2:
+	  		ssd1306_DrawBitmap(0u,0u, &planeImgDown, sizeImg, sizeImg, White);
+	  	  Update_Graphics();
+	  		break;
+	  	  case 3:
+	  		ssd1306_DrawBitmap(0u,0u, &planeImgLeft, sizeImg, sizeImg, White);
+	  	  Update_Graphics();
+	  		break;
+	  	  case 4:
+	  		ssd1306_DrawBitmap(0u,0u, &planeImgRight, sizeImg, sizeImg, White);
+	  	  Update_Graphics();
+	  		break;
+	  	  case 5:
+	  		ssd1306_DrawBitmap(0u,0u, &planeImgUpRight, sizeImg, sizeImg, White);
+	  	  Update_Graphics();
+	  		break;
+	  	  case 6:
+	  		ssd1306_DrawBitmap(0u,0u, &planeImgUpLeft, sizeImg, sizeImg, White);
+	  	  Update_Graphics();
+	  		break;
+	  	  case 7:
+	  		ssd1306_DrawBitmap(0u,0u, &planeImgDownRight, sizeImg, sizeImg, White);
+	  	  Update_Graphics();
+	  		break;
+	  	  case 8:
+	  		ssd1306_DrawBitmap(0u,0u, &planeImgDownLeft, sizeImg, sizeImg, White);
+	  	  Update_Graphics();
+	  		break;
+	  }
+	  counter++;
 	  HAL_I2C_Mem_Read(&hi2c2, BMM150_DEFAULT_I2C_ADDRESS << 1u, BMM150_REG_CHIP_ID, I2C_MEMADD_SIZE_8BIT, &id_BMM150, size, HAL_MAX_DELAY);
 	  HAL_I2C_Mem_Read(&hi2c2, BMI08_ACCEL_I2C_ADDR_PRIMARY << 1u, BMI08_REG_ACCEL_CHIP_ID, I2C_MEMADD_SIZE_8BIT, &id_BMI088_acc, size, HAL_MAX_DELAY);
 	  HAL_I2C_Mem_Read(&hi2c2, BMI08_GYRO_I2C_ADDR_PRIMARY << 1u, BMI08_REG_GYRO_CHIP_ID, I2C_MEMADD_SIZE_8BIT, &id_BMI088_gyro, size, HAL_MAX_DELAY);
 	  HAL_I2C_Mem_Read(&hi2c2, BME680_I2C_ADDR_PRIMARY << 1u, BME680_CHIP_ID_ADDR, I2C_MEMADD_SIZE_8BIT, &id_BME680, size, HAL_MAX_DELAY);
+	  if (counter > 8u)
+		  counter = 0u;
+	  HAL_Delay(500);
+	  Update_Graphics();
 	  //HAL_Delay(10000u);
   }
   /* USER CODE END WHILE */

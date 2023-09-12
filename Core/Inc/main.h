@@ -40,7 +40,23 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+enum DirectionTypes {
+	Straight	= 0,
+	Up			= 1,
+	Down		= 2,
+	Left		= 3,
+	Right		= 4,
+	UpLeft		= 5,
+	UpRight		= 6,
+	DownLeft	= 7,
+	DownRight	= 8
+};
 
+struct movement_params {
+	enum DirectionTypes direction;
+	uint16_t acceleration;
+};
+struct movement_params;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
