@@ -33,30 +33,37 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "13DOF_click.h"
+#include "motion_tracking.h"
 #include "ssd1306_conf.h"
 #include "stdint.h"
-
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-enum DirectionTypes {
-	Straight	= 0,
-	Up			= 1,
-	Down		= 2,
-	Left		= 3,
-	Right		= 4,
-	UpLeft		= 5,
-	UpRight		= 6,
-	DownLeft	= 7,
-	DownRight	= 8
-};
 
-struct movement_params {
-	enum DirectionTypes direction;
-	uint16_t acceleration;
-};
-struct movement_params;
+typedef enum ScreenTypesEnumeration {
+  Idle  = 0,
+  ConnectionStatus  = 1,
+  RawData  = 2,
+  FlightSimulation  = 3,
+  ScreenTypes_EnumCount = 4
+} ScreenTypes;
+
+
+typedef struct BoardParams {
+  SensorConnectionStruct connectionStatus;
+  OrientationTypes orientationType;
+  struct bmi08_sensor_data acceleration;
+  struct bmi08_sensor_data orientation;
+  uint16_t temperature;
+} BoardParams;
+
+extern BoardParams board;
+extern ScreenTypes previousScreen;
+extern ScreenTypes currentScreen;
+extern ScreenTypes nextScreen;
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

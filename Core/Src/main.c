@@ -21,11 +21,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ssd1306.h"
-#include "bmi08_defs.h"
-#include "bmm150_defs.h"
-#include "bme680_defs.h"
+#include "motion_tracking.h"
 #include "lookup_table.h"
 #include "graphics.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -35,6 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 
 /* USER CODE END PD */
 
@@ -46,18 +46,26 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+BoardParams board = {
+    .orientation = Straight,
+    .temperature = -1
+};
+
+ScreenTypes previousScreen = ScreenTypes_EnumCount;
+ScreenTypes currentScreen = ScreenTypes_EnumCount;
+ScreenTypes nextScreen = Idle;
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+int32_t IsClickConnected(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -67,12 +75,6 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  uint32_t timeout = 1000u;
-  uint16_t size = 1u;
-  uint16_t id_BME680 = 0u; // 0xD0
-  uint16_t id_BMI088_acc = 0u; // 0x1E acc, 0x0F gyro
-  uint16_t id_BMI088_gyro = 0u; // 0x1E acc, 0x0F gyro
-  uint16_t id_BMM150 = 0u; //0x32
 
   /* USER CODE END 1 */
 
@@ -105,70 +107,87 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
-  Init_Graphics();
+  InitGraphics();
+  InitBMI088();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t counter = 0u;
-  uint8_t sizeImg = 50u;
 
   while (1)
   {
-	  ssd1306_Fill(Black);
-	  Update_Graphics();
-	  switch(counter) {
-	  	  case 0:
-	  		ssd1306_DrawBitmap(0u,0u, &planeImgStraight, sizeImg, sizeImg, White);
-	  	  Update_Graphics();
-	  		break;
-	  	  case 1:
-	  		ssd1306_DrawBitmap(0u,0u, &planeImgUp, sizeImg, sizeImg, White);
-	  	  Update_Graphics();
-	  		break;
-	  	  case 2:
-	  		ssd1306_DrawBitmap(0u,0u, &planeImgDown, sizeImg, sizeImg, White);
-	  	  Update_Graphics();
-	  		break;
-	  	  case 3:
-	  		ssd1306_DrawBitmap(0u,0u, &planeImgLeft, sizeImg, sizeImg, White);
-	  	  Update_Graphics();
-	  		break;
-	  	  case 4:
-	  		ssd1306_DrawBitmap(0u,0u, &planeImgRight, sizeImg, sizeImg, White);
-	  	  Update_Graphics();
-	  		break;
-	  	  case 5:
-	  		ssd1306_DrawBitmap(0u,0u, &planeImgUpRight, sizeImg, sizeImg, White);
-	  	  Update_Graphics();
-	  		break;
-	  	  case 6:
-	  		ssd1306_DrawBitmap(0u,0u, &planeImgUpLeft, sizeImg, sizeImg, White);
-	  	  Update_Graphics();
-	  		break;
-	  	  case 7:
-	  		ssd1306_DrawBitmap(0u,0u, &planeImgDownRight, sizeImg, sizeImg, White);
-	  	  Update_Graphics();
-	  		break;
-	  	  case 8:
-	  		ssd1306_DrawBitmap(0u,0u, &planeImgDownLeft, sizeImg, sizeImg, White);
-	  	  Update_Graphics();
-	  		break;
-	  }
-	  counter++;
-	  HAL_I2C_Mem_Read(&hi2c2, BMM150_DEFAULT_I2C_ADDRESS << 1u, BMM150_REG_CHIP_ID, I2C_MEMADD_SIZE_8BIT, &id_BMM150, size, HAL_MAX_DELAY);
-	  HAL_I2C_Mem_Read(&hi2c2, BMI08_ACCEL_I2C_ADDR_PRIMARY << 1u, BMI08_REG_ACCEL_CHIP_ID, I2C_MEMADD_SIZE_8BIT, &id_BMI088_acc, size, HAL_MAX_DELAY);
-	  HAL_I2C_Mem_Read(&hi2c2, BMI08_GYRO_I2C_ADDR_PRIMARY << 1u, BMI08_REG_GYRO_CHIP_ID, I2C_MEMADD_SIZE_8BIT, &id_BMI088_gyro, size, HAL_MAX_DELAY);
-	  HAL_I2C_Mem_Read(&hi2c2, BME680_I2C_ADDR_PRIMARY << 1u, BME680_CHIP_ID_ADDR, I2C_MEMADD_SIZE_8BIT, &id_BME680, size, HAL_MAX_DELAY);
-	  if (counter > 8u)
-		  counter = 0u;
-	  HAL_Delay(500);
-	  Update_Graphics();
-	  //HAL_Delay(10000u);
+    ReadData();
+    UpdateGraphics();
+    HAL_Delay(100);
   }
   /* USER CODE END WHILE */
   /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
+}
+
+/**
+  * @brief
+  * @retval None
+  */
+void ReadData(void)
+{
+  switch(currentScreen)
+  {
+    case Idle:
+      if (previousScreen != Idle)
+      {
+        board.orientationType = Straight;
+      }
+    break;
+    case ConnectionStatus:
+      if ((previousScreen != Idle) && (previousScreen != ConnectionStatus))
+      {
+        board.orientationType = Straight;
+        StopBMI088Sensor();
+      }
+      ReadConnectionStatus(&board.connectionStatus);
+    break;
+      break;
+    case RawData:
+      if ((previousScreen == Idle) || (previousScreen == ConnectionStatus))
+      {
+        StartBMI088Sensor();
+      }
+      ReadSensorData();
+      break;
+    case FlightSimulation:
+      if ((previousScreen == Idle) || (previousScreen == ConnectionStatus))
+      {
+        StartBMI088Sensor();
+      }
+      ReadSensorData();
+      MapOrientation();
+      break;
+    default:
+      currentScreen = Idle;
+      break;
+  }
+}
+
+/**
+  * @brief Read data from sensor
+  * @retval None
+  */
+void ReadSensorData(void)
+{
+  board.temperature = ReadBMI088Temperature();
+  ReadBMI088Acceleration(&board.acceleration);
+  ReadBMI088Orientation(&board.orientation);
+}
+
+/**
+  * @brief Using read data map orientation to specific type
+  * @retval None
+  */
+void MapOrientation(void)
+{
+  board.orientationType = GetNewOrientation(board.orientation.x, board.orientation.y, board.orientation.z, BMI088_DEGREEPERSECOND_THRESHOLD, board.orientationType);
 }
 
 /**

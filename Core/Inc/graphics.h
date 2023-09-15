@@ -8,9 +8,16 @@
 #ifndef INC_GRAPHICS_H_
 #define INC_GRAPHICS_H_
 
-void Init_Graphics(void);
-void Update_Graphics(void);
-void Previous_Window(void);
-void Next_Window(void);
+#include "lookup_table.h"
+#include "main.h"
+
+void InitGraphics(void);
+void UpdateGraphics(void);
+void SetScreen(ScreenTypes screen);
+void PreviousScreen(void);
+void NextScreen(void);
+
+void DisplayConnectionStatus(void);
+void DisplayOrientation(void);
 
 #endif /* INC_GRAPHICS_H_ */

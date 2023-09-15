@@ -293,9 +293,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		HAL_TIM_Base_Stop_IT(&htim17);
 
 		if (Button_pressed == 1)
-			Previous_Window();
-		else if (Button_pressed == 2)
-			Next_Window();
+		{
+		  NextScreen();
+		}
+//		else if (Button_pressed == 2)
+//    {
+//			NextScreen();
+//    }
 	}
 }
 
