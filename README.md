@@ -47,22 +47,22 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
  #### Display manager
  The display manager's role is to keep track of which screen to display and, if a button is pressed, cycle through each of the screens. Reading data from the sensors is only done for the necessary information related to the current screen.
  
- - *Idle Screen:*\ 
+ - *Idle Screen:*
     While this screen is active, no readings are taken, and the sensors are powered off.
- (https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/IdleScreen.jpeg)
+ ![IdleScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/IdleScreen.jpeg)
  
- - *Connection Status Screen:*\ 
+ - *Connection Status Screen:*
     While this screen is active, the sensors are suspended, and checks are performed to verify if the sensors are connected.
- (https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/ConnectionStatusScreen.jpeg)
+ ![ConnectionStatusScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/ConnectionStatusScreen.jpeg)
  
- - *Raw Data Screen:*\ 
+ - *Raw Data Screen:*
     While this screen is active, the sensors are active, and measurements from the sensors are displayed on the screen.
- (https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataScreen.jpeg)
+ ![RawDataScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataScreen.jpeg)
  
- - *Orientation Screen:*\ 
+ - *Orientation Screen:* 
     While this screen is active, the sensors are active, and orientation calculated from the sensors measurements are displayed graphically.
- (https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen1.jpeg)
- (https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen2.jpeg)
+ ![OrientationScreen1](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen1.jpeg)
+ ![OrientationScreen2](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen2.jpeg)
  
  ## Testing
  
