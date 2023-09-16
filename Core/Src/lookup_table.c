@@ -10,6 +10,8 @@
 const uint8_t *planeImgs[NUMBER_OF_PLANE_ORIENTATIONS] =
 {
   &planeImgStraight, &planeImgStraightFliped, &planeImgStraightLeft, &planeImgStraightRight,
+  &planeImgStraight, &planeImgStraightFliped, &planeImgStraightLeft, &planeImgStraightRight,
+  &planeImgUp, &planeImgDown, &planeImgLeft, &planeImgRight,
   &planeImgUp, &planeImgDown, &planeImgLeft, &planeImgRight,
   &planeImgSideLeft, &planeImgSideRight, &planeImgSideLeftFliped, &planeImgSideRightFliped,
   &planeImgSideLeftUp, &planeImgSideRightUp, &planeImgSideLeftDown, &planeImgSideRightDown
@@ -123,6 +125,18 @@ const uint8_t planeImgStraightRight[] =
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
+// 'straight-back', 50x50px
+// const uint8_t planeImgStraightBack[] = planeImgStraight;
+
+// 'straight-back-fliped', 50x50px
+// const uint8_t planeImgStraightBackFliped[] = planeImgStraightFliped;
+
+// 'straight-back-left', 50x50px
+// const uint8_t planeImgStraightBackLeft[] = planeImgStraightLeft;
+
+// 'straight-back-right', 50x50px
+//  const uint8_t planeImgStraightBackRight[] = planeImgStraightRight;
+
 // 'up', 50x50px
 const uint8_t planeImgUp[] =
 {
@@ -230,6 +244,18 @@ const uint8_t planeImgRight[] =
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+
+// 'up-back', 50x50px
+// const uint8_t planeImgUpBack[] = planeImgUp;
+
+// 'down-back', 50x50px
+// const uint8_t planeImgDownBack[] = planeImgDown;
+
+// 'left-back', 50x50px
+// const uint8_t planeImgLeftBack[] = planeImgLeft;
+
+// 'right-back', 50x50px
+// const uint8_t planeImgRightBack[] = planeImgRight;
 
 // 'side-left', 50x50px
 const uint8_t planeImgSideLeft[] =

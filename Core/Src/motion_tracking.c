@@ -20,35 +20,67 @@
 /* USER CODE END Includes */
 const char* OrientationTypeNames[] =
 {
-  "Straight", "StraightFliped", "StraightLeft", "StraightRight",
+  "Straight", "StraightFlipped", "StraightLeft", "StraightRight",
+  "StraightBack", "StraightBackFlipped", "StraightBackLeft", "StraightBackRight",
   "Up", "Down", "Left", "Right",
-  "SideLeft", "SideRight", "SideLeftFliped", "SideRightFliped",
+  "UpBack", "DownBack", "LeftBack", "RightBack",
+  "SideLeft", "SideRight", "SideLeftFlipped", "SideRightFlipped",
   "SideLeftUp", "SideRightUp", "SideLeftDown", "SideRightDown"
 };
 
 const uint8_t xPositiveTransitionState[NUMBER_OF_ORIENTATIONS] =
 {
-    StraightRight, StraightLeft, StraightFliped, Straight, SideRightUp, SideRightDown, SideLeftFliped, SideRight, Left, Right, Left, Right, Up, Up, Down, Down
+    StraightRight, StraightLeft, StraightFlipped, Straight,
+    StraightBackLeft, StraightBackRight, StraightBack, StraightBackFlipped,
+    SideRightUp, SideRightDown, SideLeftFlipped, SideRight,
+    SideLeftUp, SideLeftDown, SideLeft, SideRightFlipped,
+    Left, RightBack, LeftBack, Right,
+    Up, UpBack, Down, DownBack
 };
 const uint8_t xNegativeTransitionState[NUMBER_OF_ORIENTATIONS] =
 {
-    StraightLeft, StraightRight, Straight, StraightFliped, SideLeftUp, SideLeftDown, SideLeft, SideRightFliped, Left, Right, Left, Right, Up, Up, Down, Down
+    StraightLeft, StraightRight, Straight, StraightFlipped,
+    StraightBackRight, StraightBackLeft, StraightBackFlipped, StraightBack,
+    SideLeftUp, SideLeftDown, SideLeft, SideRightFlipped,
+    SideRightUp, SideRightDown, SideLeftFlipped, SideRight,
+    LeftBack, Right, Left, RightBack,
+    UpBack, Up, DownBack, Down
 };
 const uint8_t yPositiveTransitionState[NUMBER_OF_ORIENTATIONS] =
 {
-    Down, Up, Right, Left, Straight, StraightFliped, StraightLeft, StraightRight, SideLeftDown, SideRightDown, SideRightUp, SideLeftUp, SideLeft, SideRight, SideRightFliped, SideLeftFliped
+    DownBack, UpBack, RightBack, LeftBack,
+    Down, Up, Right, Left,
+    Straight, StraightFlipped, StraightLeft, StraightRight,
+    StraightBack, StraightBackFlipped, StraightBackLeft, StraightBackRight,
+    SideLeftDown, SideRightDown, SideRightUp, SideLeftUp,
+    SideLeft, SideRight, SideRightFlipped, SideLeftFlipped
 };
 const uint8_t yNegativeTransitionState[NUMBER_OF_ORIENTATIONS] =
 {
-    Up, Down, Left, Right, StraightFliped, Straight, StraightRight, StraightLeft, SideLeftUp, SideRightUp, SideRightDown, SideLeftDown, SideRightFliped, SideLeftFliped, SideLeft, SideRight
+    Up, Down, Left, Right,
+    UpBack, DownBack, LeftBack, RightBack,
+    StraightBackFlipped, StraightBack, StraightBackRight, StraightBackLeft,
+    StraightFlipped, Straight, StraightRight, StraightLeft,
+    SideLeftUp, SideRightUp, SideRightDown, SideLeftDown,
+    SideRightFlipped, SideLeftFlipped, SideLeft, SideRight
 };
 const uint8_t zPositiveTransitionState[NUMBER_OF_ORIENTATIONS] =
 {
-    SideLeft, SideRightFliped, SideRightUp, SideRightDown, Left, Right, Down, Up, Straight, Straight, StraightFliped, StraightFliped, StraightRight, StraightLeft, StraightLeft, StraightRight
+    SideLeft, SideRightFlipped, SideRightUp, SideRightDown,
+    SideRight, SideLeftFlipped, SideLeftDown, SideLeftUp,
+    Left, Right, Down, Up,
+    RightBack, LeftBack, UpBack, DownBack,
+    StraightBack, Straight, StraightFlipped, StraightBackFlipped,
+    StraightBackRight, StraightLeft, StraightBackLeft, StraightRight
 };
 const uint8_t zNegativeTransitionState[NUMBER_OF_ORIENTATIONS] =
 {
-    SideRight, SideLeftFliped, SideLeftDown, SideLeftUp, Right, Left, Up, Down, Straight, Straight, StraightFliped, StraightFliped, StraightRight, StraightLeft, StraightLeft, StraightRight
+    SideRight, SideLeftFlipped, SideLeftDown, SideLeftUp,
+    SideLeft, SideRightFlipped, SideRightUp, SideRightDown,
+    Right, Left, Up, Down,
+    LeftBack, RightBack, DownBack, UpBack,
+    Straight, StraightBack, StraightBackFlipped, StraightFlipped,
+    StraightRight, StraightBackLeft, StraightLeft, StraightBackRight
 };
 
 

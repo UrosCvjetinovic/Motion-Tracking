@@ -60,9 +60,6 @@ typedef struct BoardParams {
 } BoardParams;
 
 extern BoardParams board;
-extern ScreenTypes previousScreen;
-extern ScreenTypes currentScreen;
-extern ScreenTypes nextScreen;
 
 /* USER CODE END ET */
 
