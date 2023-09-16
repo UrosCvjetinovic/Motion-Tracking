@@ -49,15 +49,13 @@ BoardParams board = {
     .temperature = -1
 };
 
-ScreenTypes previousScreen = ScreenTypes_EnumCount;
-ScreenTypes currentScreen = ScreenTypes_EnumCount;
-ScreenTypes nextScreen = Idle;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-int32_t IsClickConnected(void);
+void MapOrientation(void);
+void ReadData(void);
+void ReadBMI088Data(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -120,21 +118,21 @@ int main(void)
 }
 
 /**
-  * @brief
+  * @brief TODO
   * @retval None
   */
 void ReadData(void)
 {
-  switch(currentScreen)
+  switch(screenManager.current)
   {
-    case Idle:
-      if (previousScreen != Idle)
+    case IdleScreen:
+      if (screenManager.previous != IdleScreen)
       {
         board.orientationType = Straight;
       }
     break;
-    case ConnectionStatus:
-      if ((previousScreen != Idle) && (previousScreen != ConnectionStatus))
+    case ConnectionStatusScreen:
+      if ((screenManager.previous != IdleScreen) && (screenManager.previous != ConnectionStatusScreen))
       {
         board.orientationType = Straight;
         StopBMI088Sensor();
@@ -142,23 +140,23 @@ void ReadData(void)
       ReadConnectionStatus(&board.connectionStatus);
     break;
       break;
-    case RawData:
-      if ((previousScreen == Idle) || (previousScreen == ConnectionStatus))
+    case RawDataScreen:
+      if ((screenManager.previous == IdleScreen) || (screenManager.previous == ConnectionStatusScreen))
       {
         StartBMI088Sensor();
       }
-      ReadSensorData();
+      ReadBMI088Data();
       break;
-    case FlightSimulation:
-      if ((previousScreen == Idle) || (previousScreen == ConnectionStatus))
+    case OrientationScreen:
+      if ((screenManager.previous == IdleScreen) || (screenManager.previous == ConnectionStatusScreen))
       {
         StartBMI088Sensor();
       }
-      ReadSensorData();
+      ReadBMI088Data();
       MapOrientation();
       break;
     default:
-      currentScreen = Idle;
+      screenManager.current = IdleScreen;
       break;
   }
 }
@@ -167,7 +165,7 @@ void ReadData(void)
   * @brief Read data from sensor
   * @retval None
   */
-void ReadSensorData(void)
+void ReadBMI088Data(void)
 {
   board.temperature = ReadBMI088Temperature();
   ReadBMI088Acceleration(&board.acceleration);

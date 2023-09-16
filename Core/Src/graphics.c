@@ -11,6 +11,18 @@
 #include "main.h"
 #include "ssd1306.h"
 
+
+#define IMAGE_PLANE_POSITION_X ((uint8_t) 35u)
+#define IMAGE_PLANE_POSITION_Y ((uint8_t) 14u)
+
+void WriteNumber(int32_t number, uint8_t numberOfDigits, uint8_t x, uint8_t y);
+void DisplayIdleMenu(void);
+void DisplayConnectionStatus(void);
+void DisplayRawData(void);
+void DisplayOrientation(void);
+
+ScreenManager screenManager = {ScreenTypes_EnumCount, ScreenTypes_EnumCount, IdleScreen};
+
 void InitGraphics(void)
 {
 	ssd1306_Init();
@@ -21,35 +33,35 @@ void InitGraphics(void)
 
 	ssd1306_UpdateScreen();
 
-  SetScreen(Idle);
+  SetScreen(IdleScreen);
 }
 
 void SetScreen(ScreenTypes screen)
 {
   if (screen < ScreenTypes_EnumCount)
   {
-    nextScreen = screen;
+    screenManager.next = screen;
   }
 }
 
 void PreviousScreen(void)
 {
-  if (nextScreen == Idle)
+  if (screenManager.next == IdleScreen)
   {
-    nextScreen = ScreenTypes_EnumCount - 1u;
+    screenManager.next = ScreenTypes_EnumCount - 1u;
   }
   else
   {
-    nextScreen--;
+    screenManager.next--;
   }
 }
 
 void NextScreen(void)
 {
-  nextScreen++;
-  if (nextScreen >= ScreenTypes_EnumCount)
+  screenManager.next++;
+  if (screenManager.next >= ScreenTypes_EnumCount)
   {
-    nextScreen = Idle;
+    screenManager.next = IdleScreen;
   }
 }
 
@@ -57,38 +69,36 @@ void UpdateGraphics(void)
 {
   ssd1306_Fill(Black);
 
-  switch(currentScreen)
+  switch(screenManager.current)
   {
-    case Idle:
+    case IdleScreen:
       DisplayIdleMenu();
       ssd1306_UpdateScreen();
       break;
-    case ConnectionStatus:
+    case ConnectionStatusScreen:
       DisplayConnectionStatus();
       ssd1306_UpdateScreen();
       break;
-    case RawData:
+    case RawDataScreen:
       DisplayRawData();
       ssd1306_UpdateScreen();
       break;
-    case FlightSimulation:
+    case OrientationScreen:
       DisplayOrientation();
       ssd1306_UpdateScreen();
       break;
     default:
-      currentScreen = Idle;
+      screenManager.current = IdleScreen;
       break;
   }
-  previousScreen = currentScreen;
-  currentScreen = nextScreen;
+  screenManager.previous = screenManager.current;
+  screenManager.current = screenManager.next;
 }
 
 void DisplayIdleMenu(void)
 {
   uint8_t xOffsetScreenName = 0u;
   uint8_t yOffsetScreenName = 20u;
-
-  ssd1306_Fill(Black);
 
   ssd1306_SetCursor(0u, 0u);
   ssd1306_WriteString("Motion Tracking", Font_7x10, White);
@@ -109,11 +119,9 @@ void DisplayIdleMenu(void)
 void DisplayConnectionStatus(void)
 {
   uint8_t XOffsetSensorName = 0u;
-  uint8_t YOffsetSensorName = 10u;
+  uint8_t YOffsetSensorName = 15u;
   uint8_t XOffsetSensorStatus = 70u;
-  uint8_t YOffsetSensorStatus = 10u;
-
-  ssd1306_Fill(Black);
+  uint8_t YOffsetSensorStatus = 15u;
 
   ssd1306_SetCursor(30u, 0u);
   ssd1306_WriteString("Connected:", Font_7x10, White);
@@ -184,8 +192,6 @@ void DisplayRawData(void)
   uint8_t XOffsetSensorStatus = 40u;
   uint8_t YOffsetSensorStatus = 10u;
 
-  ssd1306_Fill(Black);
-
   ssd1306_SetCursor(30u, 0u);
   ssd1306_WriteString("Raw data:", Font_7x10, White);
 
@@ -226,7 +232,8 @@ void DisplayRawData(void)
 
 void DisplayOrientation(void)
 {
-  ssd1306_Fill(Black);
+  ssd1306_SetCursor(0u, 0u);
+  ssd1306_WriteString(OrientationTypeNames[board.orientationType], Font_7x10, White);
   ssd1306_DrawBitmap(IMAGE_PLANE_POSITION_X, IMAGE_PLANE_POSITION_Y, planeImgs[board.orientationType], IMAGE_PLANE_SIZE, IMAGE_PLANE_SIZE, White);
 
 }

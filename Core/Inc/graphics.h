@@ -15,9 +15,14 @@ void InitGraphics(void);
 void UpdateGraphics(void);
 void SetScreen(ScreenTypes screen);
 void PreviousScreen(void);
-void NextScreen(void);
+void next(void);
 
-void DisplayConnectionStatus(void);
-void DisplayOrientation(void);
+typedef struct ScreenManager {
+  ScreenTypes previous;
+  ScreenTypes current;
+  ScreenTypes next;
+} ScreenManager;
+
+extern ScreenManager screenManager;
 
 #endif /* INC_GRAPHICS_H_ */

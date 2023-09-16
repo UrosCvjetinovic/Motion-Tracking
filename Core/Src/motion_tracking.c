@@ -18,6 +18,13 @@
 #include "motion_tracking.h"
 
 /* USER CODE END Includes */
+const char* OrientationTypeNames[] =
+{
+  "Straight", "StraightFliped", "StraightLeft", "StraightRight",
+  "Up", "Down", "Left", "Right",
+  "SideLeft", "SideRight", "SideLeftFliped", "SideRightFliped",
+  "SideLeftUp", "SideRightUp", "SideLeftDown", "SideRightDown"
+};
 
 const uint8_t xPositiveTransitionState[NUMBER_OF_ORIENTATIONS] =
 {
@@ -74,3 +81,4 @@ OrientationTypes GetNewOrientation(int16_t x, int16_t y, int16_t z, uint16_t thr
 
   return orientation;
 }
+

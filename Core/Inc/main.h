@@ -43,10 +43,10 @@ extern "C" {
 /* USER CODE BEGIN ET */
 
 typedef enum ScreenTypesEnumeration {
-  Idle  = 0,
-  ConnectionStatus  = 1,
-  RawData  = 2,
-  FlightSimulation  = 3,
+  IdleScreen  = 0,
+  ConnectionStatusScreen  = 1,
+  RawDataScreen  = 2,
+  OrientationScreen  = 3,
   ScreenTypes_EnumCount = 4
 } ScreenTypes;
 

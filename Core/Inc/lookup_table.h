@@ -10,8 +10,6 @@
 
 #include "stdint.h"
 
-#define IMAGE_PLANE_POSITION_X ((uint8_t) 0u)
-#define IMAGE_PLANE_POSITION_Y ((uint8_t) 0u)
 #define IMAGE_PLANE_SIZE ((uint8_t) 50u)
 #define NUMBER_OF_PLANE_ORIENTATIONS ((uint8_t) 16u)
 

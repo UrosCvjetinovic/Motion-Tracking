@@ -30,7 +30,9 @@ typedef enum OrientationTypesEnumeration {
   DirectionTypes_EnumCount = 16
 } OrientationTypes;
 
+extern const char* OrientationTypeNames[];
 
 OrientationTypes GetNewOrientation(int16_t x, int16_t y, int16_t z, uint16_t threshold, OrientationTypes orientation);
+char* GetOrientationName(OrientationTypes orientation);
 
 #endif /* INC_MOTION_TRACKING_H_ */
