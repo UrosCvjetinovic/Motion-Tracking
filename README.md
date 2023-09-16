@@ -40,7 +40,7 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
  The orientation states can be seen in the first column of the figure 'TransitionStates'. Transitions between states occur when the angular velocity values read from the BMI088 gyroscope of axes exceeds a certain threshold.
  
  *Orientation transition states:*\
- ![TransitionStates](https://github.com/UrosCvjetinovic/Motion-Tracking.git/tree/master/img/TransitionStates.png)
+ ![TransitionStates](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/TransitionStates.png)
  
  ## Testing
  
