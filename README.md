@@ -65,9 +65,8 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
  - *Orientation Screen:* 
     While this screen is active, the sensors are active, and orientation calculated from the sensors measurements are displayed graphically.
 	
- ![OrientationScreen1](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen1.jpeg)
- 
- ![OrientationScreen2](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen2.jpeg)
+ ![OrientationScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen.jpeg)
+
  
  ## Testing
  
