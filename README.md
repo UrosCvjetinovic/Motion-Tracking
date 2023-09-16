@@ -49,19 +49,24 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
  
  - *Idle Screen:*
     While this screen is active, no readings are taken, and the sensors are powered off.
+	
  ![IdleScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/IdleScreen.jpeg)
  
  - *Connection Status Screen:*
     While this screen is active, the sensors are suspended, and checks are performed to verify if the sensors are connected.
+	
  ![ConnectionStatusScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/ConnectionStatusScreen.jpeg)
  
  - *Raw Data Screen:*
     While this screen is active, the sensors are active, and measurements from the sensors are displayed on the screen.
+	
  ![RawDataScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataScreen.jpeg)
  
  - *Orientation Screen:* 
     While this screen is active, the sensors are active, and orientation calculated from the sensors measurements are displayed graphically.
+	
  ![OrientationScreen1](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen1.jpeg)
+ 
  ![OrientationScreen2](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen2.jpeg)
  
  ## Testing
