@@ -88,10 +88,10 @@ void InitBMI088(void)
   uint8_t dataToWrite = BMI08_ACCEL_PM_ACTIVE;
   HAL_I2C_Mem_Write(&hi2c2, BMI08_ACCEL_I2C_ADDR_PRIMARY << 1u, BMI08_REG_ACCEL_PWR_CONF, I2C_MEMADD_SIZE_8BIT, &dataToWrite, 1u, HAL_MAX_DELAY);
 
-  dataToWrite = BMI08_ACCEL_BW_NORMAL << BMI08_ACCEL_BW_POS | BMI08_ACCEL_ODR_200_HZ;
+  dataToWrite = BMI08_ACCEL_BW_NORMAL << BMI08_ACCEL_BW_POS | BMI08_ACCEL_ODR_400_HZ;
   HAL_I2C_Mem_Write(&hi2c2, BMI08_ACCEL_I2C_ADDR_PRIMARY << 1u, BMI08_REG_ACCEL_CONF, I2C_MEMADD_SIZE_8BIT, &dataToWrite, 1u, HAL_MAX_DELAY);
 
-  dataToWrite = 0u;
+  dataToWrite = 0x0;
   HAL_I2C_Mem_Write(&hi2c2, BMI08_ACCEL_I2C_ADDR_PRIMARY << 1u, BMI08_REG_ACCEL_RANGE, I2C_MEMADD_SIZE_8BIT, &dataToWrite, 1u, HAL_MAX_DELAY);
 
   dataToWrite = BMI08_ACCEL_POWER_ENABLE;
@@ -124,7 +124,7 @@ void InitBME680(void)
    */
   gasSensor.amb_temp = board.temperature;
 
-  rslt = bme680_init(&gas_sensor);
+  rslt = bme680_init(&gasSensor);
 
   if (rslt == BME680_OK)
   {
@@ -190,10 +190,10 @@ void StartBME680Sensor(void)
 {
   /* Select the power mode */
   /* Must be set before writing the sensor configuration */
-  gas_sensor.power_mode = BME680_FORCED_MODE;
+  gasSensor.power_mode = BME680_FORCED_MODE;
 
   /* Set the power mode */
-  bme680_set_sensor_mode(&gas_sensor);
+  bme680_set_sensor_mode(&gasSensor);
 }
 
 
@@ -238,7 +238,7 @@ void StopBME680Sensor(void)
   gasSensor.power_mode = BME680_SLEEP_MODE;
 
   /* Set the power mode */
-  bme680_set_sensor_mode(&gas_sensor);
+  bme680_set_sensor_mode(&gasSensor);
 }
 
 /**
@@ -287,9 +287,10 @@ void ReadBMI088Acceleration(struct bmi08_sensor_data * acceleration)
   acceleration->z = getSignedValue((uint16_t)acc_z_msb << 8u | acc_z_lsb);
 
   //Recalculate acceleration
-  acceleration->x = ((acceleration->x / 32768) * 2000);
-  acceleration->y = ((acceleration->y / 32768) * 2000);
-  acceleration->z = ((acceleration->z / 32768) * 2000);
+
+  acceleration->x = acceleration->x * 3000 / 3276800 * 9.81f; // cm/s^2
+  acceleration->y = acceleration->y * 3000 / 3276800 * 9.81f; // cm/s^2
+  acceleration->z = acceleration->z * 3000 / 3276800 * 9.81f; // cm/s^2
 }
 
 /**

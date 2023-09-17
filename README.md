@@ -34,7 +34,7 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
  To debounce two buttons (SW1 and SW2), it is necessary to check their status after the initial press and activate the desired procedure (in this case, changing the displayed screen on the OLED display - NextScreen()) only once, and the waiting time is 90ms.
  
  #### I2C
- For communication with the OLED display and BMI088, I2C 2 is used, operating in standard mode at 100kHz. The implementation of the driver for this display is included as part of the stm32-ssd1306 submodule.
+ For communication with the OLED display, BME680 and BMI088, I2C 2 is used, operating in standard mode at 100kHz. The implementation of the driver for this display is included as part of the stm32-ssd1306 submodule.
  
  ### Logic
  
