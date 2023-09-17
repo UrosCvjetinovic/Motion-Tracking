@@ -62,14 +62,14 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
 	
 	Measurements are: Temperature, Pressure, Humidity and Gas ressitance
 	
- ![RawDataBME680Screen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataBME680Screen.jpeg)
+ ![RawDataBME680Screen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataBME680Screen.jpg)
  
  - *BMI088 Raw Data Screen:*
     While this screen is active, the sensor BMI088 is active and BME680 is inactive, and measurements from the BMI088 are displayed on the screen.
 	
 	Measurements are: Temperature, Acceleration and Angular velocity in three axes
 	
- ![RawDataBMI088Screen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataBMI088Screen.jpeg)
+ ![RawDataBMI088Screen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataBMI088Screen.jpg)
  
  - *Orientation Screen:* 
     While this screen is active, the sensors are active, and orientation calculated from the sensors measurements are displayed graphically.
