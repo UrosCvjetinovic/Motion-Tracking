@@ -21,7 +21,7 @@
 
 /* USER CODE END Includes */
 
-struct bme680_dev gas_sensor;
+struct bme680_dev gasSensor;
 
 int16_t getSignedValue(uint16_t u)
 {
@@ -112,40 +112,40 @@ void InitBMI088(void)
 void InitBME680(void)
 {
   int8_t rslt = BME680_OK;
-  uint8_t set_required_settings;
+  uint8_t setRequiredSettings;
 
-  gas_sensor.dev_id = BME680_I2C_ADDR_PRIMARY;
-  gas_sensor.intf = BME680_I2C_INTF;
-  gas_sensor.read = user_i2c_read;
-  gas_sensor.write = user_i2c_write;
-  gas_sensor.delay_ms = user_delay_ms;
+  gasSensor.dev_id = BME680_I2C_ADDR_PRIMARY;
+  gasSensor.intf = BME680_I2C_INTF;
+  gasSensor.read = user_i2c_read;
+  gasSensor.write = user_i2c_write;
+  gasSensor.delay_ms = user_delay_ms;
   /* amb_temp can be set to 25 prior to configuring the gas sensor
    * or by performing a few temperature readings without operating the gas sensor.
    */
-  gas_sensor.amb_temp = board.temperature;
+  gasSensor.amb_temp = board.temperature;
 
   rslt = bme680_init(&gas_sensor);
 
   if (rslt == BME680_OK)
   {
     /* Set the temperature, pressure and humidity settings */
-    gas_sensor.tph_sett.os_hum = BME680_OS_2X;
-    gas_sensor.tph_sett.os_pres = BME680_OS_4X;
-    gas_sensor.tph_sett.os_temp = BME680_OS_8X;
-    gas_sensor.tph_sett.filter = BME680_FILTER_SIZE_3;
+    gasSensor.tph_sett.os_hum = BME680_OS_2X;
+    gasSensor.tph_sett.os_pres = BME680_OS_4X;
+    gasSensor.tph_sett.os_temp = BME680_OS_8X;
+    gasSensor.tph_sett.filter = BME680_FILTER_SIZE_3;
 
     /* Set the remaining gas sensor settings and link the heating profile */
-    gas_sensor.gas_sett.run_gas = BME680_ENABLE_GAS_MEAS;
+    gasSensor.gas_sett.run_gas = BME680_ENABLE_GAS_MEAS;
     /* Create a ramp heat waveform in 3 steps */
-    gas_sensor.gas_sett.heatr_temp = 320; /* degree Celsius */
-    gas_sensor.gas_sett.heatr_dur = 150; /* milliseconds */
+    gasSensor.gas_sett.heatr_temp = 320; /* degree Celsius */
+    gasSensor.gas_sett.heatr_dur = 150; /* milliseconds */
 
     /* Set the required sensor settings needed */
-    set_required_settings = BME680_OST_SEL | BME680_OSP_SEL | BME680_OSH_SEL | BME680_FILTER_SEL
+    setRequiredSettings = BME680_OST_SEL | BME680_OSP_SEL | BME680_OSH_SEL | BME680_FILTER_SEL
         | BME680_GAS_SENSOR_SEL;
 
     /* Set the desired sensor configuration */
-    rslt = bme680_set_sensor_settings(set_required_settings,&gas_sensor);
+    rslt = bme680_set_sensor_settings(setRequiredSettings, &gasSensor);
   }
 }
 
@@ -235,7 +235,7 @@ void StopBME680Sensor(void)
 {
   /* Select the power mode */
   /* Must be set before writing the sensor configuration */
-  gas_sensor.power_mode = BME680_SLEEP_MODE;
+  gasSensor.power_mode = BME680_SLEEP_MODE;
 
   /* Set the power mode */
   bme680_set_sensor_mode(&gas_sensor);
@@ -331,18 +331,18 @@ void ReadBME680(int16_t *temperature, uint32_t *pressure, uint32_t *humidity, ui
   struct bme680_field_data data;
   int8_t rslt = 0; /* Return 0 for Success, non-zero for failure */
   /* Trigger the next measurement if you would like to read data out continuously */
-  if (gas_sensor.power_mode == BME680_FORCED_MODE) {
-      rslt = bme680_set_sensor_mode(&gas_sensor);
+  if (gasSensor.power_mode == BME680_FORCED_MODE) {
+      rslt = bme680_set_sensor_mode(&gasSensor);
   }
 
   /* Get the total measurement duration so as to sleep or wait till the
    * measurement is complete */
   uint16_t meas_period;
-  bme680_get_profile_dur(&meas_period, &gas_sensor);
+  bme680_get_profile_dur(&meas_period, &gasSensor);
 
   user_delay_ms(meas_period); /* Delay till the measurement is ready */
 
-  rslt = bme680_get_sensor_data(&data, &gas_sensor);
+  rslt = bme680_get_sensor_data(&data, &gasSensor);
 
   if (rslt == BME680_OK)
   {
