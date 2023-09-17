@@ -46,7 +46,7 @@
 /* USER CODE BEGIN PV */
 BoardParams board = {
     .orientation = Straight,
-    .temperature = -1
+    .temperature = 26
 };
 
 /* USER CODE END PV */
@@ -56,6 +56,7 @@ void SystemClock_Config(void);
 void MapOrientation(void);
 void ReadData(void);
 void ReadBMI088Data(void);
+void ReadBME680Data(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -100,6 +101,7 @@ int main(void)
 
   InitGraphics();
   InitBMI088();
+  InitBME680();
 
   /* USER CODE END 2 */
 
@@ -129,6 +131,8 @@ void ReadData(void)
       if (screenManager.previous != IdleScreen)
       {
         board.orientationType = Straight;
+        StopBMI088Sensor();
+        StopBME680Sensor();
       }
     break;
     case ConnectionStatusScreen:
@@ -136,20 +140,31 @@ void ReadData(void)
       {
         board.orientationType = Straight;
         StopBMI088Sensor();
+        StopBME680Sensor();
       }
       ReadConnectionStatus(&board.connectionStatus);
     break;
       break;
-    case RawDataScreen:
+    case BME680RawDataScreen:
       if ((screenManager.previous == IdleScreen) || (screenManager.previous == ConnectionStatusScreen))
       {
+        StopBMI088Sensor();
+      }
+      StartBME680Sensor();
+      ReadBME680Data();
+      break;
+    case BMI088RawDataScreen:
+      if ((screenManager.previous != BMI088RawDataScreen) && (screenManager.previous != OrientationScreen))
+      {
+        StopBME680Sensor();
         StartBMI088Sensor();
       }
       ReadBMI088Data();
       break;
     case OrientationScreen:
-      if ((screenManager.previous == IdleScreen) || (screenManager.previous == ConnectionStatusScreen))
+      if ((screenManager.previous != BMI088RawDataScreen) && (screenManager.previous != OrientationScreen))
       {
+        StopBME680Sensor();
         StartBMI088Sensor();
       }
       ReadBMI088Data();
@@ -162,14 +177,23 @@ void ReadData(void)
 }
 
 /**
-  * @brief Read data from sensor
+  * @brief Read data from sensor BMI088
   * @retval None
   */
 void ReadBMI088Data(void)
 {
-  board.temperature = ReadBMI088Temperature();
+  ReadBMI088Temperature(&board.temperature);
   ReadBMI088Acceleration(&board.acceleration);
   ReadBMI088Orientation(&board.orientation);
+}
+
+/**
+  * @brief Read data from sensor BME680
+  * @retval None
+  */
+void ReadBME680Data(void)
+{
+  ReadBME680(&board.temperature, &board.pressure, &board.humidity, &board.gasResistance);
 }
 
 /**

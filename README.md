@@ -57,10 +57,19 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
 	
  ![ConnectionStatusScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/ConnectionStatusScreen.jpeg)
  
- - *Raw Data Screen:*
-    While this screen is active, the sensors are active, and measurements from the sensors are displayed on the screen.
+ - *BME680 Raw Data Screen:*
+    While this screen is active, the sensor BME680 is active and BMI088 is inactive, and measurements from the BME680 are displayed on the screen.
 	
- ![RawDataScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataScreen.jpeg)
+	Measurements are: Temperature, Pressure, Humidity and Gas ressitance
+	
+ ![RawDataBME680Screen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataBME680Screen.jpeg)
+ 
+ - *BMI088 Raw Data Screen:*
+    While this screen is active, the sensor BMI088 is active and BME680 is inactive, and measurements from the BMI088 are displayed on the screen.
+	
+	Measurements are: Temperature, Acceleration and Angular velocity in three axes
+	
+ ![RawDataBMI088Screen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataBMI088Screen.jpeg)
  
  - *Orientation Screen:* 
     While this screen is active, the sensors are active, and orientation calculated from the sensors measurements are displayed graphically.
@@ -69,9 +78,9 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
 
  
  ## Testing
- 
- TODO: add images
+ Testing manually has not shown errors. Video will not be uploaded to repo, no point.
  
  ### Comments
  - Transitions are made to only change by rotating on one of the axes. Possible improvement can be to have states when two axis exceed threshold at the same time
+ - Automated testing of the transition through states can be achieved by implementing a function that simulates gyroscope measurements, which could be a potential improvement.
  

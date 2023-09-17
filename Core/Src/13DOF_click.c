@@ -21,19 +21,39 @@
 
 /* USER CODE END Includes */
 
-unsigned int u;
-int i;
+struct bme680_dev gas_sensor;
 
 int16_t getSignedValue(uint16_t u)
 {
   int16_t i;
-  const uint16_t maxSignedValue = (uint16_t) 1u << 15u - 1u;
 
-  if (u <= maxSignedValue)
+  if (u <= (uint16_t) 1u << 15u - 1u)
     i = (int16_t)u;
   else
     i = -(int16_t)~u - 1;
   return i;
+}
+void user_delay_ms(uint32_t period)
+{
+  HAL_Delay(period);
+}
+
+int8_t user_i2c_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len)
+{
+    int8_t rslt = 0; /* Return 0 for Success, non-zero for failure */
+
+    HAL_I2C_Mem_Read(&hi2c2, dev_id << 1u, reg_addr, I2C_MEMADD_SIZE_8BIT, reg_data, len, HAL_MAX_DELAY);
+
+    return rslt;
+}
+
+int8_t user_i2c_write(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len)
+{
+    int8_t rslt = 0; /* Return 0 for Success, non-zero for failure */
+
+    HAL_I2C_Mem_Write(&hi2c2, dev_id << 1u, reg_addr, I2C_MEMADD_SIZE_8BIT, reg_data, len, HAL_MAX_DELAY);
+
+    return rslt;
 }
 
 /**
@@ -86,6 +106,51 @@ void InitBMI088(void)
 }
 
 /**
+  * @brief Initialize BME680
+  * @retval None
+  */
+void InitBME680(void)
+{
+  int8_t rslt = BME680_OK;
+  uint8_t set_required_settings;
+
+  gas_sensor.dev_id = BME680_I2C_ADDR_PRIMARY;
+  gas_sensor.intf = BME680_I2C_INTF;
+  gas_sensor.read = user_i2c_read;
+  gas_sensor.write = user_i2c_write;
+  gas_sensor.delay_ms = user_delay_ms;
+  /* amb_temp can be set to 25 prior to configuring the gas sensor
+   * or by performing a few temperature readings without operating the gas sensor.
+   */
+  gas_sensor.amb_temp = board.temperature;
+
+  rslt = bme680_init(&gas_sensor);
+
+  if (rslt == BME680_OK)
+  {
+    /* Set the temperature, pressure and humidity settings */
+    gas_sensor.tph_sett.os_hum = BME680_OS_2X;
+    gas_sensor.tph_sett.os_pres = BME680_OS_4X;
+    gas_sensor.tph_sett.os_temp = BME680_OS_8X;
+    gas_sensor.tph_sett.filter = BME680_FILTER_SIZE_3;
+
+    /* Set the remaining gas sensor settings and link the heating profile */
+    gas_sensor.gas_sett.run_gas = BME680_ENABLE_GAS_MEAS;
+    /* Create a ramp heat waveform in 3 steps */
+    gas_sensor.gas_sett.heatr_temp = 320; /* degree Celsius */
+    gas_sensor.gas_sett.heatr_dur = 150; /* milliseconds */
+
+    /* Set the required sensor settings needed */
+    set_required_settings = BME680_OST_SEL | BME680_OSP_SEL | BME680_OSH_SEL | BME680_FILTER_SEL
+        | BME680_GAS_SENSOR_SEL;
+
+    /* Set the desired sensor configuration */
+    rslt = bme680_set_sensor_settings(set_required_settings,&gas_sensor);
+  }
+}
+
+
+/**
   * @brief Starts BMI088 sensor measurements
   * @retval None
   */
@@ -118,6 +183,21 @@ void StartBMI088Gyroscope(void)
 }
 
 /**
+  * @brief Starts BME680 sensor measurements
+  * @retval None
+  */
+void StartBME680Sensor(void)
+{
+  /* Select the power mode */
+  /* Must be set before writing the sensor configuration */
+  gas_sensor.power_mode = BME680_FORCED_MODE;
+
+  /* Set the power mode */
+  bme680_set_sensor_mode(&gas_sensor);
+}
+
+
+/**
   * @brief Stop BMI088 sensor measurements
   * @retval None
   */
@@ -148,10 +228,24 @@ void StopBMI088Gyroscope(void)
 }
 
 /**
-  * @brief Read temperature from BMI088
-  * @retval Returns temperature in C
+  * @brief Sto[s BME680 sensor measurements
+  * @retval None
   */
-int16_t ReadBMI088Temperature(void)
+void StopBME680Sensor(void)
+{
+  /* Select the power mode */
+  /* Must be set before writing the sensor configuration */
+  gas_sensor.power_mode = BME680_SLEEP_MODE;
+
+  /* Set the power mode */
+  bme680_set_sensor_mode(&gas_sensor);
+}
+
+/**
+  * @brief Read temperature from BMI088
+  * @retval None
+  */
+void ReadBMI088Temperature(int16_t *temperature)
 {
   uint8_t temperatureMSB;
   uint8_t temperatureLSB;
@@ -165,7 +259,7 @@ int16_t ReadBMI088Temperature(void)
   {
     temp = temp - 2048;
   }
-  return temp * 0.125 + 23;
+  *temperature = temp * 0.125 + 23;
 }
 
 /**
@@ -227,3 +321,36 @@ void ReadBMI088Orientation(struct bmi08_sensor_data * orientation)
   orientation->y = ((orientation->y * 125) / 32768);
   orientation->z = ((orientation->z * 125) / 32768);
 }
+
+/**
+  * @brief Read temperature from BMI088
+  * @retval Returns temperature in C
+  */
+void ReadBME680(int16_t *temperature, uint32_t *pressure, uint32_t *humidity, uint32_t *gasResistance)
+{
+  struct bme680_field_data data;
+  int8_t rslt = 0; /* Return 0 for Success, non-zero for failure */
+  /* Trigger the next measurement if you would like to read data out continuously */
+  if (gas_sensor.power_mode == BME680_FORCED_MODE) {
+      rslt = bme680_set_sensor_mode(&gas_sensor);
+  }
+
+  /* Get the total measurement duration so as to sleep or wait till the
+   * measurement is complete */
+  uint16_t meas_period;
+  bme680_get_profile_dur(&meas_period, &gas_sensor);
+
+  user_delay_ms(meas_period); /* Delay till the measurement is ready */
+
+  rslt = bme680_get_sensor_data(&data, &gas_sensor);
+
+  if (rslt == BME680_OK)
+  {
+    *temperature = data.temperature / 100u;
+    *pressure = data.pressure / 1000;
+    *humidity = data.humidity / 1000;
+    *gasResistance = data.gas_resistance / 1000;
+  }
+
+}
+

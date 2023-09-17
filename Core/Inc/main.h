@@ -45,9 +45,10 @@ extern "C" {
 typedef enum ScreenTypesEnumeration {
   IdleScreen  = 0,
   ConnectionStatusScreen  = 1,
-  RawDataScreen  = 2,
-  OrientationScreen  = 3,
-  ScreenTypes_EnumCount = 4
+  BME680RawDataScreen  = 2,
+  BMI088RawDataScreen  = 3,
+  OrientationScreen  = 4,
+  ScreenTypes_EnumCount = 5
 } ScreenTypes;
 
 
@@ -56,7 +57,10 @@ typedef struct BoardParams {
   OrientationTypes orientationType;
   struct bmi08_sensor_data acceleration;
   struct bmi08_sensor_data orientation;
-  uint16_t temperature;
+  int16_t temperature;
+  uint32_t pressure;
+  uint32_t humidity;
+  uint32_t gasResistance;
 } BoardParams;
 
 extern BoardParams board;

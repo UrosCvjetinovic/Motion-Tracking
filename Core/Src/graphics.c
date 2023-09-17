@@ -18,7 +18,8 @@
 void WriteNumber(int32_t number, uint8_t numberOfDigits, uint8_t x, uint8_t y);
 void DisplayIdleMenu(void);
 void DisplayConnectionStatus(void);
-void DisplayRawData(void);
+void DisplayBME680RawData(void);
+void DisplayBMI088RawData(void);
 void DisplayOrientation(void);
 
 ScreenManager screenManager = {ScreenTypes_EnumCount, ScreenTypes_EnumCount, IdleScreen};
@@ -79,8 +80,12 @@ void UpdateGraphics(void)
       DisplayConnectionStatus();
       ssd1306_UpdateScreen();
       break;
-    case RawDataScreen:
-      DisplayRawData();
+    case BME680RawDataScreen:
+      DisplayBME680RawData();
+      ssd1306_UpdateScreen();
+      break;
+    case BMI088RawDataScreen:
+      DisplayBMI088RawData();
       ssd1306_UpdateScreen();
       break;
     case OrientationScreen:
@@ -108,7 +113,11 @@ void DisplayIdleMenu(void)
   yOffsetScreenName += 10u;
 
   ssd1306_SetCursor(xOffsetScreenName, yOffsetScreenName);
-  ssd1306_WriteString("*Raw data", Font_7x10, White);
+  ssd1306_WriteString("*Raw data BME680", Font_7x10, White);
+  yOffsetScreenName += 10u;
+
+  ssd1306_SetCursor(xOffsetScreenName, yOffsetScreenName);
+  ssd1306_WriteString("*Raw data BMI088", Font_7x10, White);
   yOffsetScreenName += 10u;
 
   ssd1306_SetCursor(xOffsetScreenName, yOffsetScreenName);
@@ -120,7 +129,7 @@ void DisplayConnectionStatus(void)
 {
   uint8_t XOffsetSensorName = 0u;
   uint8_t YOffsetSensorName = 15u;
-  uint8_t XOffsetSensorStatus = 70u;
+  uint8_t XOffsetSensorStatus = 60u;
   uint8_t YOffsetSensorStatus = 15u;
 
   ssd1306_SetCursor(30u, 0u);
@@ -185,15 +194,50 @@ void DisplayConnectionStatus(void)
   }
 }
 
-void DisplayRawData(void)
+void DisplayBME680RawData(void)
+{
+  uint8_t XOffsetSensorName = 0u;
+  uint8_t YOffsetSensorName = 10u;
+  uint8_t XOffsetSensorStatus = 70u;
+  uint8_t YOffsetSensorStatus = 10u;
+
+  ssd1306_SetCursor(10u, 0u);
+  ssd1306_WriteString("BME680 Raw data:", Font_7x10, White);
+
+  ssd1306_SetCursor(XOffsetSensorName, YOffsetSensorName);
+  ssd1306_WriteString("T [C]:", Font_7x10, White);
+  WriteNumber(board.temperature, 2u, XOffsetSensorStatus, YOffsetSensorStatus);
+  YOffsetSensorName += 10u;
+  YOffsetSensorStatus += 10u;
+
+  ssd1306_SetCursor(XOffsetSensorName, YOffsetSensorName);
+  ssd1306_WriteString("P [kPa]", Font_7x10, White);
+  WriteNumber(board.pressure, 3u, XOffsetSensorStatus, YOffsetSensorStatus);
+  YOffsetSensorName += 10u;
+  YOffsetSensorStatus += 10u;
+
+  ssd1306_SetCursor(XOffsetSensorName, YOffsetSensorName);
+  ssd1306_WriteString("Hum [%]", Font_7x10, White);
+  WriteNumber(board.humidity, 3u, XOffsetSensorStatus, YOffsetSensorStatus);
+  YOffsetSensorName += 10u;
+  YOffsetSensorStatus += 10u;
+
+  ssd1306_SetCursor(XOffsetSensorName, YOffsetSensorName);
+  ssd1306_WriteString("GR [kOhm]", Font_7x10, White);
+  WriteNumber(board.gasResistance, 3u, XOffsetSensorStatus, YOffsetSensorStatus);
+  YOffsetSensorName += 10u;
+  YOffsetSensorStatus += 10u;
+}
+
+void DisplayBMI088RawData(void)
 {
   uint8_t XOffsetSensorName = 0u;
   uint8_t YOffsetSensorName = 10u;
   uint8_t XOffsetSensorStatus = 40u;
   uint8_t YOffsetSensorStatus = 10u;
 
-  ssd1306_SetCursor(30u, 0u);
-  ssd1306_WriteString("Raw data:", Font_7x10, White);
+  ssd1306_SetCursor(10u, 0u);
+  ssd1306_WriteString("BMI088 Raw data:", Font_7x10, White);
 
   ssd1306_SetCursor(XOffsetSensorName, YOffsetSensorName);
   ssd1306_WriteString("T [C]:", Font_7x10, White);
