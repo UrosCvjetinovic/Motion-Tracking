@@ -61,9 +61,11 @@ typedef struct BoardParams {
   uint32_t pressure;
   uint32_t humidity;
   uint32_t gasResistance;
+  uint32_t cycleNumber;
 } BoardParams;
 
 extern BoardParams board;
+extern uint8_t sendToUart;
 
 /* USER CODE END ET */
 

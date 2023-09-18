@@ -46,8 +46,11 @@
 /* USER CODE BEGIN PV */
 BoardParams board = {
     .orientation = Straight,
-    .temperature = 26
+    .temperature = 26,
+    .cycleNumber = 0u
 };
+
+uint8_t sendToUart = 0u;
 
 /* USER CODE END PV */
 
@@ -112,6 +115,10 @@ int main(void)
   {
     ReadData();
     UpdateGraphics();
+    if (sendToUart)
+    {
+      SendDataToUart();
+    }
     HAL_Delay(100);
   }
   /* USER CODE END WHILE */
@@ -133,6 +140,7 @@ void ReadData(void)
         board.orientationType = Straight;
         StopBMI088Sensor();
         StopBME680Sensor();
+        board.cycleNumber = 0u;
       }
     break;
     case ConnectionStatusScreen:
@@ -141,6 +149,7 @@ void ReadData(void)
         board.orientationType = Straight;
         StopBMI088Sensor();
         StopBME680Sensor();
+        board.cycleNumber = 0u;
       }
       ReadConnectionStatus(&board.connectionStatus);
     break;
@@ -149,6 +158,7 @@ void ReadData(void)
       if ((screenManager.previous == IdleScreen) || (screenManager.previous == ConnectionStatusScreen))
       {
         StopBMI088Sensor();
+        board.cycleNumber = 0u;
       }
       StartBME680Sensor();
       ReadBME680Data();
@@ -158,6 +168,7 @@ void ReadData(void)
       {
         StopBME680Sensor();
         StartBMI088Sensor();
+        board.cycleNumber = 0u;
       }
       ReadBMI088Data();
       break;
@@ -166,6 +177,7 @@ void ReadData(void)
       {
         StopBME680Sensor();
         StartBMI088Sensor();
+        board.cycleNumber = 0u;
       }
       ReadBMI088Data();
       MapOrientation();
@@ -185,6 +197,7 @@ void ReadBMI088Data(void)
   ReadBMI088Temperature(&board.temperature);
   ReadBMI088Acceleration(&board.acceleration);
   ReadBMI088Orientation(&board.orientation);
+  board.cycleNumber++;
 }
 
 /**
@@ -194,6 +207,7 @@ void ReadBMI088Data(void)
 void ReadBME680Data(void)
 {
   ReadBME680(&board.temperature, &board.pressure, &board.humidity, &board.gasResistance);
+  board.cycleNumber++;
 }
 
 /**

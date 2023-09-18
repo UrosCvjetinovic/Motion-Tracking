@@ -17,6 +17,8 @@ void SetScreen(ScreenTypes screen);
 void PreviousScreen(void);
 void next(void);
 
+void SendDataToUart(void);
+
 typedef struct ScreenManager {
   ScreenTypes previous;
   ScreenTypes current;

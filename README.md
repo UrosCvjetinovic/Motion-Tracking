@@ -36,6 +36,9 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
  #### I2C
  For communication with the OLED display, BME680 and BMI088, I2C 2 is used, operating in standard mode at 100kHz. The implementation of the driver for this display is included as part of the stm32-ssd1306 submodule.
  
+ #### USART2
+ For serial communication with computer. Depending on the current screen the read data is transmitted via serial port. Starting the communication is started pressing one of the buttons.
+ 
  ### Logic
  
  #### Orientation states
@@ -72,7 +75,7 @@ git clone --recurse-submodules https://github.com/UrosCvjetinovic/Motion-Trackin
  ![RawDataBMI088Screen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/RawDataBMI088Screen.jpg)
  
  - *Orientation Screen:* 
-    While this screen is active, the sensors are active, and orientation calculated from the sensors measurements are displayed graphically.
+    While this screen is active, the sensor BMI088 is active and BME680 is inactive, and orientation calculated from the BMI088 measurements are displayed graphically on the OLED.
 	
  ![OrientationScreen](https://github.com/UrosCvjetinovic/Motion-Tracking/blob/master/img/OrientationScreen.jpeg)
 
